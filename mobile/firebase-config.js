@@ -1,0 +1,50 @@
+// ═══════════════════════════════════════════════════════════════════════════
+//  firebase-config.js — Módulo Central de Configuração Firebase
+//  VISA Careiro — Cadastro Sanitário
+//
+//  Utilizado por: index.html · mobile.html · seed_usuarios.html
+//
+//  ⚠️  Altere APENAS este arquivo caso as credenciais do projeto mudem.
+// ═══════════════════════════════════════════════════════════════════════════
+
+(function () {
+  'use strict';
+
+  // ── Credenciais do Projeto Firebase ────────────────────────────────────
+  const firebaseConfig = {
+   apiKey: "AIzaSyDR7J5Fzqkpe6s9GIZW7ibDQgkguHTt_2U",
+   authDomain: "visa-f4c86.firebaseapp.com",
+   projectId: "visa-f4c86",
+   storageBucket: "visa-f4c86.firebasestorage.app",
+   messagingSenderId: "794096930643",
+   appId: "1:794096930643:web:c3ae4d70fcd34c44d49ba6"
+ };
+
+  // ── Inicializa o app evitando duplicidade ───────────────────────────────
+  const _fbApp = firebase.apps.length
+    ? firebase.apps[0]
+    : firebase.initializeApp(firebaseConfig);
+
+  const _db     = firebase.firestore(_fbApp);
+  const _fbAuth = (typeof firebase.auth === 'function')
+    ? firebase.auth(_fbApp)
+    : null; // seed_usuarios.html não carrega firebase-auth-compat.js
+
+  // ── Referências Firestore compartilhadas ────────────────────────────────
+  const _STATE_REF    = _db.collection('visa_state').doc('app');
+  const _BASE_REF     = _db.collection('visa_state').doc('base_data');
+  const _INATIVOS_REF = _db.collection('visa_state').doc('inativos_data');
+  const _USERS_REF    = _db.collection('visa_usuarios');
+
+  // ── Expõe tudo no escopo global ─────────────────────────────────────────
+  Object.assign(window, {
+    _fbApp,
+    _db,
+    _fbAuth,
+    _STATE_REF,
+    _BASE_REF,
+    _INATIVOS_REF,
+    _USERS_REF,
+  });
+
+})();
